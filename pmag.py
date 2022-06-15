@@ -15,7 +15,7 @@ from numpy import linalg
 import os
 import time
 import pandas as pd
-from pmagpy import new_builder as nb
+#from pmagpy import new_builder as nb
 
 
 
