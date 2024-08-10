@@ -110,7 +110,7 @@ def saveInputFile(files):
 	#Saving the input file/data 
 	#output have the same colums, but whithou header.
 	#file = open(files)
-	reader=csv.reader(open(files, 'rU'), delimiter=' ')
+	reader=csv.reader(open(files), delimiter=' ')
 	dat=list(reader)
 	#file.close()
 	data=dat[1:]    #guardamos los datos sin el encabezado
@@ -577,7 +577,7 @@ def getInFile_main(files):
 	
 	
 	#Saving the input file/data 
-	reader=csv.reader(open(files, 'rU'), delimiter=' ')
+	reader=csv.reader(open(files), delimiter=' ')
 	dat=list(reader)
 	data=dat[1:]    #removing the header
 	data_float=data[:]
@@ -627,7 +627,7 @@ def getInFile_mat(files):
 	#Saving the input file/data 
 	#output have the same colums, but whithou header.
 	#file = open(files)
-	reader=csv.reader(open(files, 'rU'), delimiter=' ')
+	reader=csv.reader(open(files), delimiter=' ')
 	dat=list(reader)
 	data=dat[1:]    #removing the header
 	data_float=data[:]
