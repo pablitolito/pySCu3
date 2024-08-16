@@ -41,7 +41,8 @@ def main():
         -A, plot the A/N matrix
         -s [s/i/n], plot the SCI solutions, the intersections, or none.
         -fmt [svg, jpg, eps, pdf] format for output images.
-        -i interactive entry of the remagnetization direction
+        -i interactive entry of the remagnetization direction (ellipse)
+        -fisher interactive entry of the remagentization direction (alpha95)
 
     DEFAULTS
     -f, AFILE:  SCdata_main.txt
@@ -94,6 +95,16 @@ def main():
             ref.append(float(dato))
     else: iRef='false'
     
+    if '-fisher' in sys.argv:
+        iF='true'
+        print('\nInput the Fisher parameters (separated by spaces) of the remagnetization direction:')
+        ref_input = input("\nDec Inc a95: An example...\n329.9 39.5 4.5\n").split(' ')
+        ref=[]
+        for dato in ref_input:
+            ref.append(float(dato))
+    else: iF='false'
+        
+    
     infile_m=infile[:-8]+'mat.txt'
     infile_ref=infile[:-8]+'Ref.txt'
     infile_inter=infile[:-8]+'inter.txt'
@@ -111,7 +122,7 @@ def main():
     if path.exists(infile_sci):    SCIs='true'
     else: SCIs='false'
     
-    if Ref=='false' and iRef=='false': 
+    if Ref=='false' and iRef=='false' and iF=='false': 
         print("\nTake care, I don't found the file", infile_ref, " whit the reference direction")
     if matrix=='false' and preA=='y':
             print("\nTake care, I don't found the file", infile_m, ' whit the A/N matriz data')
@@ -135,7 +146,7 @@ def main():
     site,sc,geo,tilt,bfd=scu.getInFile_main(infile) #main file
     n=len(site)
     
-    if Ref=='true' and iRef=='false': #reference direction
+    if Ref=='true' and iRef=='false' and iF=='false': #reference direction
         reader=csv.reader(open(infile_ref), delimiter=' ')
         dat_Ref=list(reader)
         ref=[float(dat_Ref[1][1]),float(dat_Ref[1][2]),float(dat_Ref[1][3]),float(dat_Ref[1][5]),
@@ -172,10 +183,15 @@ def main():
         scu.plot_di_mean(dato[0],dato[1],dato[2],color='r',marker='s',markersize=8,label='Geo',legend='no',zorder=3)
         #You can change the marker (+, ., o, *, p, s, x, D, h, ^), the color (b, g, r, c, m, y, k, w) or the size as you prefere
     
-    if Ref=='true': #The reference
+    if Ref=='true' and iF=='false': #The reference
         scu.plotCONF(ref)
         plt.text(0.51, -1.05, 'Reference', fontsize = 13)
         plt.scatter(0.45, -1, color='m',marker='*',s=100)
+    if iF=='true':
+        scu.plot_di_mean(ref[0], ref[1], ref[2], color='m', marker='*')
+        plt.text(0.51, -1.05, 'Reference', fontsize = 13)
+        plt.scatter(0.45, -1, color='m',marker='*',s=100)
+        
     plt.title('Before Bedding Correction',fontsize=15)
     plt.savefig(out_name_bbc)
     
@@ -190,8 +206,12 @@ def main():
     
     for dato in sc:
         scu.smallcirc(dato,1)
-    if Ref=='true':
+    if Ref=='true' and iF=='false': #The reference
         scu.plotCONF(ref)
+        plt.text(0.51, -1.05, 'Reference', fontsize = 13)
+        plt.scatter(0.45, -1, color='m',marker='*',s=100)
+    if iF=='true':
+        scu.plot_di_mean(ref[0], ref[1], ref[2], color='m', marker='*')
         plt.text(0.51, -1.05, 'Reference', fontsize = 13)
         plt.scatter(0.45, -1, color='m',marker='*',s=100)
     
@@ -215,8 +235,12 @@ def main():
     for dato in bfd:
         scu.plot_di_mean(dato[0],dato[1],dato[2],color='b',marker='o',markersize=5,label='BFD',legend='no',zorder=3)
     
-    if Ref=='true': #Ploting the reference and the leyend
+    if Ref=='true' and iF=='false': #The reference
         scu.plotCONF(ref)
+        plt.text(0.51, -1.05, 'Reference', fontsize = 13)
+        plt.scatter(0.45, -1, color='m',marker='*',s=100)
+    if iF=='true':
+        scu.plot_di_mean(ref[0], ref[1], ref[2], color='m', marker='*')
         plt.text(0.51, -1.05, 'Reference', fontsize = 13)
         plt.scatter(0.45, -1, color='m',marker='*',s=100)
     plt.savefig(out_name_bfd)
@@ -265,8 +289,9 @@ def main():
         plt.scatter(-0.38, -1.12, color='k',marker='.',s=50)
         for dato in dat_SCIs:
             scu.plot_di_mean(float(dato[0]),float(dato[1]),0.,color='k',marker='.',markersize=1,label='SCIs',legend='no')
+    
             
-    if fig4=='true' and Ref=='true': #Plotting the reference and the leyend
+    if fig4=='true' and Ref=='true' and iF=='false': #Plotting the reference and the leyend
         scu.plotCONF(ref)
         plt.text(0.6, 0.83, 'Reference', fontsize = 13)
         plt.scatter(0.93, 0.73, color='m',marker='*',s=100)
