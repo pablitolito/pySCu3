@@ -63,8 +63,8 @@ def para_dir(list):
 
 def fishrot(kappa,N,D,I): #from Pmagpy
     """
-    Description: generates set of Fisher distributed data from specified distribution 
-	Input: kappa (fisher distribution concentration parameter), number of desired subsamples, Dec and Inc
+    Description: generates set of  distributed data from specified distribution 
+	Input: kappa ( distribution concentration parameter), number of desired subsamples, Dec and Inc
 	Output: list with N pairs of Dec, Inc.
     """
     out_d=[]
@@ -198,10 +198,12 @@ def fisher_mean(dir):
 
 	#calculating mean direction
 	DecMean=deg*np.arctan(Y/X)
+	'''
 	if X<0.:
 		DecMean=DecMean+180.
 	elif Y<0.:
 		DecMean=DecMean+360.
+  	'''
 	IncMean=deg*np.arcsin(Z/R)
 	fisher_mean=[DecMean,IncMean,k,alpha95]
 	return fisher_mean
